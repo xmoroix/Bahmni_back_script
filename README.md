@@ -31,12 +31,13 @@ Edit crontab
 crontab -e
 
 Add daily full backup at 2 AM
-0 2 * * * cd /path/to/bahmni-standard && /path/to/bahmni-standard/Bahmni_backup_script/bahmni_backup_module.sh && bash -c 'source /path/to/bahmni-standard/Bahmni_backup_script/bahmni_backup_module.sh && full_backup' >> /path/to/bahmni-standard/bahmni-backups/cron.log 2>&1
+"0 2 * * * cd /path/to/bahmni-standard && /path/to/bahmni-standard/Bahmni_backup_script/bahmni_backup_module.sh && bash -c 'source /path/to/bahmni-standard/Bahmni_backup_script/bahmni_backup_module.sh && full_backup' >> /path/to/bahmni-standard/bahmni-backups/cron.log 2>&1"
 
 
 ## Directory Structure
 
 bahmni-standard/
+"
 ├── Bahmni_backup_script/
 │ ├── bahmni_manager.sh # Main interactive menu
 │ ├── bahmni_backup_module.sh # Backup functions
@@ -48,6 +49,7 @@ bahmni-standard/
 │ └── ...
 ├── docker-compose.yml
 └── .env
+"
 
 
 ## Backup Components
@@ -79,19 +81,13 @@ MIT
 ## Setup Instructions
 
 # Navigate to bahmni-standard directory
-cd /path/to/bahmni-standard
+  cd /path/to/bahmni-standard
 
-# Create the script directory
-mkdir -p Bahmni_backup_script
-
-# Create the three script files (paste content above)
-# bahmni_manager.sh
-# bahmni_backup_module.sh
-# bahmni_restore_module.sh
-# README.md
+# Clone this repo
+- Git clone https://github.com/xmoroix/Bahmni_back_script.git
 
 # Make scripts executable
-chmod +x Bahmni_backup_script/*.sh
+  chmod +x Bahmni_backup_script/*.sh
 
 # Run the manager
-./Bahmni_backup_script/bahmni_manager.sh
+  ./Bahmni_backup_script/bahmni_manager.sh
