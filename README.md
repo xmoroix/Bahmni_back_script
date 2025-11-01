@@ -80,14 +80,14 @@ MIT
 
 ## Setup Instructions
 
-# Navigate to bahmni-standard directory
+## Navigate to bahmni-standard directory
   cd /path/to/bahmni-standard
 
-# Clone this repo
+## Clone this repo
 - Git clone https://github.com/xmoroix/Bahmni_back_script.git
 
-# Make scripts executable
+## Make scripts executable
   chmod +x Bahmni_backup_script/*.sh
 
-# Run the manager
+## Run the manager
   ./Bahmni_backup_script/bahmni_manager.sh
