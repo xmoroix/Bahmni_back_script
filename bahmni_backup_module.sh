@@ -42,8 +42,8 @@ backup_openmrs_db() {
     
     echo "  Backing up OpenMRS database..."
     docker compose exec -T openmrsdb mysqldump \
-        -u"${OPENMRS_DB_USERNAME}" \
-        -p"${OPENMRS_DB_PASSWORD}" \
+        -u"root" \
+        -p"${MYSQL_ROOT_PASSWORD}" \
         "${OPENMRS_DB_NAME}" \
         --single-transaction \
         --quick \

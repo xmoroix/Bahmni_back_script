@@ -88,7 +88,6 @@ restore_openmrs_db() {
     
     echo "  Restoring OpenMRS database..."
     
-    # Start ONLY the database service without dependencies
     start_single_service "openmrsdb"
     
     if ! wait_for_service "openmrsdb"; then
@@ -96,7 +95,6 @@ restore_openmrs_db() {
         return 1
     fi
     
-    # Additional wait for MySQL to be fully ready
     sleep 10
     
     echo "    Dropping and recreating database..."
@@ -104,17 +102,25 @@ restore_openmrs_db() {
         -e "DROP DATABASE IF EXISTS ${OPENMRS_DB_NAME}; CREATE DATABASE ${OPENMRS_DB_NAME};" 2>/dev/null
     
     echo "    Importing database..."
+    # Use root user for MySQL import to avoid privilege issues
     gunzip < "$backup_file" | \
         docker compose exec -T openmrsdb mysql \
-        -u"${OPENMRS_DB_USERNAME}" \
-        -p"${OPENMRS_DB_PASSWORD}" \
-        "${OPENMRS_DB_NAME}"
+        -uroot \
+        -p"${MYSQL_ROOT_PASSWORD}" \
+        "${OPENMRS_DB_NAME}" 2>/dev/null
     
-    # Stop the database service before proceeding
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}    ✓ Import successful${NC}"
+    else
+        echo -e "${RED}    ✗ Import failed${NC}"
+    fi
+    
     stop_service "openmrsdb"
     
     echo -e "${GREEN}  ✓ OpenMRS database restored${NC}"
 }
+
+
 
 restore_openelis_db() {
     local backup_dir=$1
@@ -203,11 +209,12 @@ restore_reports_db() {
         -e "DROP DATABASE IF EXISTS ${REPORTS_DB_NAME}; CREATE DATABASE ${REPORTS_DB_NAME};" 2>/dev/null
     
     echo "    Importing database..."
+    # Use root user for MySQL import to avoid privilege issues
     gunzip < "$backup_file" | \
         docker compose exec -T reportsdb mysql \
-        -u"${REPORTS_DB_USERNAME}" \
-        -p"${REPORTS_DB_PASSWORD}" \
-        "${REPORTS_DB_NAME}"
+        -uroot \
+        -p"${MYSQL_ROOT_PASSWORD}" \
+        "${REPORTS_DB_NAME}" 2>/dev/null
     
     stop_service "reportsdb"
     
